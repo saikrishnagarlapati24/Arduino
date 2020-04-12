@@ -16,6 +16,8 @@ int sig4red=13;
 int sig4yel=12;
 int sig4grn=11;
 
+int gtime=7000;
+int ytime=3000;
 
 void setup()
 {
@@ -40,58 +42,90 @@ void setup()
 
 void loop()
 {
-  if(timeslot==1)
+  switch(timeslot)
   {
-    digitalWrite(sig1yel,HIGH);
-    digitalWrite(sig2yel,HIGH);
-    digitalWrite(sig3yel,HIGH);
-    digitalWrite(sig4yel,HIGH);
-    /*digitalWrite(sig1grn,LOW);
-    digitalWrite(sig2grn,LOW);
-    digitalWrite(sig3grn,LOW);
-    digitalWrite(sig4grn,LOW);
-    digitalWrite(sig1red,LOW);
-    digitalWrite(sig2red,LOW);
-    digitalWrite(sig3red,LOW);
-    digitalWrite(sig4red,LOW);*/
-  }
-  if(timeslot==2||4);
-  {
-    digitalWrite(sig4yel,LOW);
-    digitalWrite(sig1grn,HIGH);
-    digitalWrite(sig2red,HIGH);
-    digitalWrite(sig3red,HIGH);
-    digitalWrite(sig4red,HIGH);
-    delay(gtime);
-    digitalWrite(sig1grn,LOW);
-    digitalWrite(sig1yel,HIGH);
-    delay(ytime);
+    case 1 :
+    {
+      digitalWrite(sig1yel,HIGH);
+      digitalWrite(sig2yel,HIGH);
+      digitalWrite(sig3yel,HIGH);
+      digitalWrite(sig4yel,HIGH);
+      break;
+    }
+    case 2 :
+    case 4 :
+  	{
+      digitalWrite(sig1grn,HIGH);
+      digitalWrite(sig2red,HIGH);
+      digitalWrite(sig3red,HIGH);
+      digitalWrite(sig4red,HIGH);
+      delay(gtime);
+      digitalWrite(sig1grn,LOW);
+      digitalWrite(sig1yel,HIGH);
+      delay(ytime);
     
-    digitalWrite(sig1yel,LOW);
-    digitalWrite(sig1red,HIGH);
-    digitalWrite(sig2red,LOW);
-    digitalWrite(sig2grn,HIGH);
-    delay(gtime);
-    digitalWrite(sig2grn,LOW);
-    digitalWrite(sig2yel,HIGH);
-    delay(ytime);
-    
-    digitalWrite(sig2yel,LOW);
-    digitalWrite(sig2red,HIGH);
-    digitalWrite(sig3red,LOW);
-    digitalWrite(sig3grn,HIGH);
-    delay(g);
-    digitalWrite(sig3grn,LOW);
-    digitalWrite(sig3yel,HIGH);
-    delay(1000);
-    
-    digitalWrite(sig3yel,LOW);
-    digitalWrite(sig3red,HIGH);
-    digitalWrite(sig4red,LOW);
-    digitalWrite(sig4grn,HIGH);
-    delay(3000);
-    digitalWrite(sig4grn,LOW);
-    digitalWrite(sig4yel,HIGH);
-    delay(1000);
-  }
+      digitalWrite(sig1yel,LOW);
+      digitalWrite(sig1red,HIGH);
+      digitalWrite(sig2red,LOW);
+      digitalWrite(sig2grn,HIGH);
+      delay(gtime);
+      digitalWrite(sig2grn,LOW);
+      digitalWrite(sig2yel,HIGH);
+      delay(ytime);
+
+      digitalWrite(sig2yel,LOW);
+      digitalWrite(sig2red,HIGH);
+      digitalWrite(sig3red,LOW);
+      digitalWrite(sig3grn,HIGH);
+      delay(gtime);
+      digitalWrite(sig3grn,LOW);
+      digitalWrite(sig3yel,HIGH);
+      delay(ytime);
+
+      digitalWrite(sig3yel,LOW);
+      digitalWrite(sig3red,HIGH);
+      digitalWrite(sig4red,LOW);
+      digitalWrite(sig4grn,HIGH);
+      delay(gtime);
+      digitalWrite(sig4grn,LOW);
+      digitalWrite(sig4yel,HIGH);
+      delay(ytime);
+      digitalWrite(sig4yel,LOW);
+      digitalWrite(sig1red,LOW);
+      break;
+    }
+    case 3 :
+    {
+      digitalWrite(sig2grn,HIGH);
+      digitalWrite(sig4grn,HIGH);
+      digitalWrite(sig1red,HIGH);
+      digitalWrite(sig3red,HIGH);
+      delay(gtime);
+      digitalWrite(sig2grn,LOW);
+      digitalWrite(sig4grn,LOW);
+      digitalWrite(sig2yel,HIGH);
+      digitalWrite(sig4yel,HIGH);
+      delay(ytime);
+      digitalWrite(sig2yel,LOW);
+      digitalWrite(sig4yel,LOW);
+      digitalWrite(sig2red,HIGH);
+      digitalWrite(sig4red,HIGH);
+      digitalWrite(sig1red,LOW);
+      digitalWrite(sig3red,LOW);
+      digitalWrite(sig1grn,HIGH);
+      digitalWrite(sig3grn,HIGH);
+      delay(gtime);
+      digitalWrite(sig1grn,LOW);
+      digitalWrite(sig3grn,LOW);
+      digitalWrite(sig1yel,HIGH);
+      digitalWrite(sig3yel,HIGH);
+      delay(ytime);
+      digitalWrite(sig1yel,LOW);
+      digitalWrite(sig3yel,LOW);
+      digitalWrite(sig2red,LOW);
+      digitalWrite(sig4red,LOW);
+      break;
+    }
+  } 
 }
+
