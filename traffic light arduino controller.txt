@@ -1,0 +1,97 @@
+int timeslot;
+
+int sig1red=7;
+int sig1yel=6;
+int sig1grn=5;
+
+int sig2red=4;
+int sig2yel=3;
+int sig2grn=2;
+
+int sig3red=10;
+int sig3yel=9;
+int sig3grn=8;
+
+int sig4red=13;
+int sig4yel=12;
+int sig4grn=11;
+
+
+void setup()
+{
+  pinMode(sig1red,OUTPUT);
+  pinMode(sig1yel,OUTPUT);
+  pinMode(sig1grn,OUTPUT);
+  pinMode(sig2red,OUTPUT);
+  pinMode(sig2yel,OUTPUT);
+  pinMode(sig2grn,OUTPUT);
+  pinMode(sig3red,OUTPUT);
+  pinMode(sig3yel,OUTPUT);
+  pinMode(sig3grn,OUTPUT);
+  pinMode(sig4red,OUTPUT);
+  pinMode(sig4yel,OUTPUT);
+  pinMode(sig4grn,OUTPUT);
+  
+  Serial.begin(9600);
+  Serial.println("Enter the timeslot : ");
+  while(Serial.available()==0) {}
+  timeslot=Serial.parseInt();
+}
+
+void loop()
+{
+  if(timeslot==1)
+  {
+    digitalWrite(sig1yel,HIGH);
+    digitalWrite(sig2yel,HIGH);
+    digitalWrite(sig3yel,HIGH);
+    digitalWrite(sig4yel,HIGH);
+    /*digitalWrite(sig1grn,LOW);
+    digitalWrite(sig2grn,LOW);
+    digitalWrite(sig3grn,LOW);
+    digitalWrite(sig4grn,LOW);
+    digitalWrite(sig1red,LOW);
+    digitalWrite(sig2red,LOW);
+    digitalWrite(sig3red,LOW);
+    digitalWrite(sig4red,LOW);*/
+  }
+  if(timeslot==2||4);
+  {
+    digitalWrite(sig4yel,LOW);
+    digitalWrite(sig1grn,HIGH);
+    digitalWrite(sig2red,HIGH);
+    digitalWrite(sig3red,HIGH);
+    digitalWrite(sig4red,HIGH);
+    delay(gtime);
+    digitalWrite(sig1grn,LOW);
+    digitalWrite(sig1yel,HIGH);
+    delay(ytime);
+    
+    digitalWrite(sig1yel,LOW);
+    digitalWrite(sig1red,HIGH);
+    digitalWrite(sig2red,LOW);
+    digitalWrite(sig2grn,HIGH);
+    delay(gtime);
+    digitalWrite(sig2grn,LOW);
+    digitalWrite(sig2yel,HIGH);
+    delay(ytime);
+    
+    digitalWrite(sig2yel,LOW);
+    digitalWrite(sig2red,HIGH);
+    digitalWrite(sig3red,LOW);
+    digitalWrite(sig3grn,HIGH);
+    delay(g);
+    digitalWrite(sig3grn,LOW);
+    digitalWrite(sig3yel,HIGH);
+    delay(1000);
+    
+    digitalWrite(sig3yel,LOW);
+    digitalWrite(sig3red,HIGH);
+    digitalWrite(sig4red,LOW);
+    digitalWrite(sig4grn,HIGH);
+    delay(3000);
+    digitalWrite(sig4grn,LOW);
+    digitalWrite(sig4yel,HIGH);
+    delay(1000);
+  }
+}
