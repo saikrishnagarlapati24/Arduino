@@ -16,8 +16,8 @@ int sig4red=13;
 int sig4yel=12;
 int sig4grn=11;
 
-int gtime=7000;
-int ytime=3000;
+int gtime=3000;
+int ytime=1000;
 
 void setup()
 {
@@ -50,6 +50,12 @@ void loop()
       digitalWrite(sig2yel,HIGH);
       digitalWrite(sig3yel,HIGH);
       digitalWrite(sig4yel,HIGH);
+      delay(ytime);
+      digitalWrite(sig1yel,LOW);
+      digitalWrite(sig2yel,LOW);
+      digitalWrite(sig3yel,LOW);
+      digitalWrite(sig4yel,LOW);
+      delay(500);
       break;
     }
     case 2 :
