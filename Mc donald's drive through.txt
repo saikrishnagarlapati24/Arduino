@@ -1,0 +1,166 @@
+#include<Servo.h>
+#include<IRremote.h>
+
+//led pins declaration
+int led_r=9;
+int led_b=6;
+int led_g=5;
+int led_y=3;
+
+//ir pins declaration
+int ir_1=8;
+int ir_2=7;
+int ir_3=4;
+int ir_4=2;
+int ir_enough=A0;
+IRrecv irrecv1(ir_1);//IR sensor object for sensor 1
+IRrecv irrecv2(ir_2);//IR sensor object for sensor 2
+IRrecv irrecv3(ir_3);//IR sensor object for sensor 3
+IRrecv irrecv4(ir_4);//IR sensor object for sensor 4
+IRrecv irrecv5(ir_enough);//IR sensor object for sensor 5
+decode_results res;
+//HEX 1 corresponds to item 1 and is dedicated to IR sensor 1
+//HEX 2 corresponds to item 2 and is dedicated to IR sensor 2
+//HEX 3 corresponds to item 3 and is dedicated to IR sensor 3
+//HEX 4 corresponds to item 4 and is dedicated to IR sensor 4
+//HEX 5 corresponds to ordering is over and is dedicated to IR sensor 5
+
+//US sensors pins declaration.Trig pin of both is connected to
+//the same pin.
+int trig1=0;
+int us_1echo=12;
+int trig2=1;
+int us_2echo=13;
+//servo objects
+Servo servo_1;
+Servo servo_2;
+int ser1sig=10;
+int ser2sig=11;
+
+//necessary variables
+long us1_dur;
+long us2_dur;
+int vehicleentered=0;//To mark the entry of a vehicle.
+int flag=0;//To mark that ordering of items has been complete.
+//5th IR sensor is for saying that ordering is finish.Flag=0 means
+//the order is in progress an 1 means the order is done.
+
+void setup()
+{
+  servo_1.attach(ser1sig);
+  servo_2.attach(ser2sig);
+  
+  pinMode(led_r,OUTPUT);
+  pinMode(led_b,OUTPUT);
+  pinMode(led_g,OUTPUT);
+  pinMode(led_y,OUTPUT);
+  
+  pinMode(ir_1,INPUT);
+  pinMode(ir_2,INPUT);
+  pinMode(ir_3,INPUT);
+  pinMode(ir_4,INPUT);
+  irrecv1.enableIRIn();
+  irrecv2.enableIRIn();
+  irrecv3.enableIRIn();
+  irrecv4.enableIRIn();
+  irrecv5.enableIRIn();
+  
+  pinMode(trig1,OUTPUT);
+  pinMode(trig2,OUTPUT);
+  pinMode(us_1echo,INPUT);
+  pinMode(us_2echo,INPUT);
+}
+
+void loop()
+{
+  servo_1.write(0);
+  servo_2.write(0);
+  //Opening of baricade for entry
+  //I want to open the barricade only if the vehicle is within
+  //10metre proximity. So timeout= 2*10m/340m/s=0.058823529seconds
+  //For simulation purposes the proximity is taken to be 30 inch
+  //so, 4443UL in place of 58832UL.So keep the object within 30
+  //inch for simulation.
+  digitalWrite(trig1,LOW);
+  delayMicroseconds(2);
+  digitalWrite(trig1,HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trig1,LOW);
+  us1_dur=pulseIn(us_1echo,HIGH,4443UL);//58823UL);
+  if((us1_dur>0)&&(us1_dur<=4443UL))
+  {
+    servo_1.write(90);
+    vehicleentered=1;
+    delay(4000);
+    servo_1.write(0);
+  }
+  
+  //Only if the vehicle enters this block should be performed.
+  if(vehicleentered==1)
+  {
+    //wait for the vehicle to reach window 1
+    delay(3000);
+    while(flag!=1)
+    {
+      if (irrecv1.decode(&res)&&(res.value==0xFD08F7))
+      {
+        digitalWrite(led_r,HIGH);
+        delay(2000);
+        digitalWrite(led_r,LOW); 
+        irrecv1.resume(); 
+       }
+      if(irrecv2.decode(&res)&&(res.value==0xFD8877))
+      {
+        digitalWrite(led_b,HIGH);
+        delay(2000);
+        digitalWrite(led_b,LOW);
+        irrecv2.resume();
+      }  
+      if(irrecv3.decode(&res)&&(res.value==0xFD48B7)) 
+      {
+        digitalWrite(led_g,HIGH);
+        delay(2000);
+        digitalWrite(led_g,LOW);
+        irrecv3.resume();
+      }
+      if(irrecv4.decode(&res)&&(res.value==0xFD28D7))
+      {
+        digitalWrite(led_y,HIGH);
+        delay(2000);
+        digitalWrite(led_y,LOW);
+        irrecv4.resume();
+      }
+      if(irrecv5.decode(&res)&&(res.value==0xFDA857))
+      {
+        //Ordering has been done.
+        flag=1;
+        irrecv5.resume();
+      }
+    }
+    flag=0;
+    while(1)
+    {
+      digitalWrite(trig2,LOW);
+      delayMicroseconds(2);
+      digitalWrite(trig2,HIGH);
+      delayMicroseconds(10);
+      digitalWrite(trig2,LOW);
+      //Assuming the vehicles is within 1 meter from the 3rd 
+      //window where us_2 is placed, the timeout is 
+      // 2*1m/340m/s=0.00588235sec=5882microseconds.
+      us2_dur=pulseIn(us_2echo,HIGH,5882UL);
+      if(us2_dur>0&&us2_dur<=5882UL)
+      {
+        servo_2.write(90);
+        delay(4000);
+        servo_2.write(0);
+        break;
+      }
+    }
+    //Making vehicleentered variable back to 0.
+    vehicleentered=0;
+  }
+}
+
+
+
