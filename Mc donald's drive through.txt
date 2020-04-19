@@ -25,8 +25,7 @@ decode_results res;
 //HEX 4 corresponds to item 4 and is dedicated to IR sensor 4
 //HEX 5 corresponds to ordering is over and is dedicated to IR sensor 5
 
-//US sensors pins declaration.Trig pin of both is connected to
-//the same pin.
+//US sensors pins declaration.
 int trig1=0;
 int us_1echo=12;
 int trig2=1;
